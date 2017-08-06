@@ -22,6 +22,8 @@
  */
 package com.semanticcms.core.resources.servlet;
 
+import com.aoindustries.servlet.ServletContextCache;
+import com.aoindustries.util.Tuple2;
 import com.semanticcms.core.resources.Resource;
 import com.semanticcms.core.resources.ResourceStore;
 import java.util.HashMap;
@@ -30,7 +32,14 @@ import javax.servlet.ServletContext;
 
 /**
  * Accesses resources in the local {@link ServletContext}.
+ * <p>
+ * Optionally, and by default, uses {@link ServletContextCache} to work around some performance issues
+ * with direct use of {@link ServletContext}, especially when a large number of JAR files are deployed
+ * to <code>/WEB-INF/lib</code>, which is one of the shared content distribution models for
+ * <a href="https://semanticcms.com/">SemanticCMS</a>.
+ * </p>
  *
+ * @see  ServletContextCache
  * @see  ServletContext#getResource(java.lang.String)
  * @see  ServletContext#getResourceAsStream(java.lang.String)
  * @see  ServletContext#getRealPath(java.lang.String)
@@ -45,8 +54,12 @@ public class ServletResourceStore implements ResourceStore {
 	 *
 	 * @param  prefix  Must be either empty or a {@link Resource#checkPath(java.lang.String) valid path}.
 	 *                 Any trailing slash "/" will be stripped, after validity check.
+	 *
+	 * @param cached  Enables use of {@link ServletContextCache} to workaround some performance issues with direct use of {@link ServletContext},
+	 *                but introduces a potential delay of up to {@link ServletContextCache#REFRESH_INTERVAL} milliseconds (current 5 seconds)
+	 *                before new or moved content becomes visible.
 	 */
-	public static ServletResourceStore getInstance(ServletContext servletContext, String prefix) {
+	public static ServletResourceStore getInstance(ServletContext servletContext, String prefix, boolean cached) {
 		if(!prefix.isEmpty()) {
 			Resource.checkPath(prefix);
 			// Strip any trailing slash
@@ -54,32 +67,44 @@ public class ServletResourceStore implements ResourceStore {
 			assert !prefix.endsWith("/") : "Trailing double-slash should have been caught by Resource.checkPath";
 		}
 
-		Map<String,ServletResourceStore> instances;
+		Map<Tuple2<String,Boolean>,ServletResourceStore> instances;
 		synchronized(servletContext) {
 			@SuppressWarnings("unchecked")
-			Map<String,ServletResourceStore> map = (Map<String,ServletResourceStore>)servletContext.getAttribute(INSTANCES_SERVLET_CONTEXT_KEY);
+			Map<Tuple2<String,Boolean>,ServletResourceStore> map = (Map<Tuple2<String,Boolean>,ServletResourceStore>)servletContext.getAttribute(INSTANCES_SERVLET_CONTEXT_KEY);
 			if(map == null) {
-				map = new HashMap<String,ServletResourceStore>();
+				map = new HashMap<Tuple2<String,Boolean>,ServletResourceStore>();
 				servletContext.setAttribute(INSTANCES_SERVLET_CONTEXT_KEY, map);
 			}
 			instances = map;
 		}
 		synchronized(instances) {
-			ServletResourceStore store = instances.get(prefix);
+			Tuple2<String,Boolean> key = new Tuple2<String,Boolean>(prefix, cached);
+			ServletResourceStore store = instances.get(key);
 			if(store == null) {
-				store = new ServletResourceStore(servletContext, prefix);
-				instances.put(prefix, store);
+				store = new ServletResourceStore(servletContext, prefix, cached);
+				instances.put(key, store);
 			}
 			return store;
 		}
 	}
 
-	private final ServletContext servletContext;
-	private final String prefix;
+	/**
+	 * Gets a cached instance.
+	 *
+	 * @see  #getInstance(javax.servlet.ServletContext, java.lang.String, boolean)
+	 */
+	public static ServletResourceStore getInstance(ServletContext servletContext, String prefix) {
+		return getInstance(servletContext, prefix, true);
+	}
 
-	private ServletResourceStore(ServletContext servletContext, String prefix) {
+	final ServletContext servletContext;
+	final String prefix;
+	final ServletContextCache cache;
+
+	private ServletResourceStore(ServletContext servletContext, String prefix, boolean cached) {
 		this.servletContext = servletContext;
 		this.prefix = prefix;
+		this.cache = cached ? ServletContextCache.getCache(servletContext) : null;
 	}
 
 	public ServletContext getServletContext() {

@@ -22,9 +22,10 @@
  */
 package com.semanticcms.core.resources.servlet;
 
-import com.aoindustries.io.FileUtils;
 import com.aoindustries.io.IoUtils;
 import com.aoindustries.servlet.ServletContextCache;
+import com.aoindustries.tempfiles.TempFile;
+import com.aoindustries.tempfiles.TempFileContext;
 import com.semanticcms.core.resources.ResourceConnection;
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,7 +56,8 @@ public class ServletResourceConnection extends ResourceConnection {
 
 	private URLConnection urlConn;
 	private boolean urlConnInputAccessed;
-	private File tmpFile;
+	private TempFileContext tempFileContext;
+	private TempFile tempFile;
 
 	private boolean closed;
 
@@ -185,35 +187,20 @@ public class ServletResourceConnection extends ResourceConnection {
 			fileAccessed = true;
 			return file;
 		} else {
-			if(tmpFile == null) {
+			if(tempFile == null) {
 				// Handle as URL
 				URL url = getContextUrl();
 				if(url == null) throw new FileNotFoundException(resource.toString());
 				if(urlConn == null) urlConn = url.openConnection();
-				File tmpDir = (File)servletContext.getAttribute(ServletContext.TEMPDIR); // javax.servlet.context.tempdir
-				// Be resilient to temp directory issues
-				if(
-					tmpDir == null
-					|| !tmpDir.exists()
-					|| !tmpDir.isDirectory()
-					|| !tmpDir.canWrite()
-					|| !tmpDir.canRead()
-				) {
-					File systemTmpDir = new File(System.getProperty("java.io.tmpdir"));
-					if(!systemTmpDir.equals(tmpDir)) {
-						servletContext.log("Servlet temporary directory not set, doesn't exist, is not a directory, is not writable, or is not readable; using system temp directory instead: servletTemp=" + tmpDir + ", systemTemp=" + systemTmpDir);
-						if(!systemTmpDir.exists()) throw new IOException("System temporary directory does not exist: " + systemTmpDir);
-						if(!systemTmpDir.isDirectory()) throw new IOException("System temporary directory is not a directory: " + systemTmpDir);
-						if(!systemTmpDir.canWrite()) throw new IOException("System temporary directory is not writable: " + systemTmpDir);
-						if(!systemTmpDir.canRead()) throw new IOException("System temporary directory is not readable: " + systemTmpDir);
-						tmpDir = systemTmpDir;
-					}
-				}
 				boolean success = false;
 				try {
-					tmpFile = File.createTempFile(ServletResourceConnection.class.getName(), null, tmpDir);
-					tmpFile.deleteOnExit(); // TODO: JDK implementation builds an ever-growing set.  Find or create an implementation with a shutdown hook that allows deregistering.
-					FileOutputStream tmpOut = new FileOutputStream(tmpFile);
+					if(tempFileContext == null) {
+						tempFileContext = new TempFileContext(
+							(File)servletContext.getAttribute(ServletContext.TEMPDIR) // javax.servlet.context.tempdir
+						);
+					}
+					tempFile = tempFileContext.createTempFile(ServletResourceConnection.class.getName(), null);
+					FileOutputStream tmpOut = new FileOutputStream(tempFile.getFile());
 					try {
 						InputStream urlIn = urlConn.getInputStream();
 						try {
@@ -227,14 +214,14 @@ public class ServletResourceConnection extends ResourceConnection {
 					}
 					success = true;
 				} finally {
-					if(tmpFile != null && !success) {
-						FileUtils.delete(tmpFile);
-						tmpFile = null;
+					if(tempFile != null && !success) {
+						tempFile.close();
+						tempFile = null;
 					}
 				}
 				fileAccessed = true;
 			}
-			return tmpFile;
+			return tempFile.getFile();
 		}
 	}
 
@@ -242,6 +229,7 @@ public class ServletResourceConnection extends ResourceConnection {
 	public void close() throws IOException {
 		if(in != null) in.close();
 		if(urlConn != null && !urlConnInputAccessed) {
+			// Close input if not accessed to let underlying URLConnection close.
 			InputStream urlIn = urlConn.getInputStream();
 			try {
 				urlConnInputAccessed = true;
@@ -249,9 +237,13 @@ public class ServletResourceConnection extends ResourceConnection {
 				urlIn.close();
 			}
 		}
-		if(tmpFile != null) {
-			FileUtils.delete(tmpFile);
-			tmpFile = null;
+		// Closed with its context
+		//if(tempFile != null) {
+		//	tempFile.close();
+		//	tempFile = null;
+		//}
+		if(tempFileContext != null) {
+			tempFileContext.close();
 		}
 		closed = true;
 	}

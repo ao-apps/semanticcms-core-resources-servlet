@@ -22,9 +22,10 @@
  */
 package com.semanticcms.core.resources.servlet;
 
+import com.aoindustries.net.Path;
 import com.aoindustries.servlet.ServletContextCache;
 import com.aoindustries.util.Tuple2;
-import com.semanticcms.core.resources.Resource;
+import com.aoindustries.validation.ValidationException;
 import com.semanticcms.core.resources.ResourceStore;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,36 +53,45 @@ public class ServletResourceStore implements ResourceStore {
 	 * Gets the servlet store for the given context and prefix.
 	 * Only one {@link ServletResourceStore} is created per unique context and prefix.
 	 *
-	 * @param  prefix  Must be either empty or a {@link Resource#checkPath(java.lang.String) valid path}.
-	 *                 Any trailing slash "/" will be stripped, after validity check.
+	 * @param  path  Must be a {@link Path valid path}.
+	 *               Any trailing slash "/" will be stripped.
 	 *
 	 * @param cached  Enables use of {@link ServletContextCache} to workaround some performance issues with direct use of {@link ServletContext},
 	 *                but introduces a potential delay of up to {@link ServletContextCache#REFRESH_INTERVAL} milliseconds (current 5 seconds)
 	 *                before new or moved content becomes visible.
 	 */
-	public static ServletResourceStore getInstance(ServletContext servletContext, String prefix, boolean cached) {
-		if(!prefix.isEmpty()) {
-			Resource.checkPath(prefix);
-			// Strip any trailing slash
-			if(prefix.endsWith("/")) prefix = prefix.substring(0, prefix.length() - 1);
-			assert !prefix.endsWith("/") : "Trailing double-slash should have been caught by Resource.checkPath";
+	public static ServletResourceStore getInstance(ServletContext servletContext, Path path, boolean cached) {
+		// Strip trailing '/' to normalize
+		{
+			String pathStr = path.toString();
+			if(!pathStr.equals("/") && pathStr.endsWith("/")) {
+				try {
+					path = Path.valueOf(
+						pathStr.substring(0, pathStr.length() - 1)
+					);
+				} catch(ValidationException e) {
+					AssertionError ae = new AssertionError("Stripping trailing slash from path should not render it invalid");
+					ae.initCause(e);
+					throw ae;
+				}
+			}
 		}
 
-		Map<Tuple2<String,Boolean>,ServletResourceStore> instances;
+		Map<Tuple2<Path,Boolean>,ServletResourceStore> instances;
 		synchronized(servletContext) {
 			@SuppressWarnings("unchecked")
-			Map<Tuple2<String,Boolean>,ServletResourceStore> map = (Map<Tuple2<String,Boolean>,ServletResourceStore>)servletContext.getAttribute(INSTANCES_SERVLET_CONTEXT_KEY);
+			Map<Tuple2<Path,Boolean>,ServletResourceStore> map = (Map<Tuple2<Path,Boolean>,ServletResourceStore>)servletContext.getAttribute(INSTANCES_SERVLET_CONTEXT_KEY);
 			if(map == null) {
-				map = new HashMap<Tuple2<String,Boolean>,ServletResourceStore>();
+				map = new HashMap<Tuple2<Path,Boolean>,ServletResourceStore>();
 				servletContext.setAttribute(INSTANCES_SERVLET_CONTEXT_KEY, map);
 			}
 			instances = map;
 		}
 		synchronized(instances) {
-			Tuple2<String,Boolean> key = new Tuple2<String,Boolean>(prefix, cached);
+			Tuple2<Path,Boolean> key = new Tuple2<Path,Boolean>(path, cached);
 			ServletResourceStore store = instances.get(key);
 			if(store == null) {
-				store = new ServletResourceStore(servletContext, prefix, cached);
+				store = new ServletResourceStore(servletContext, path, cached);
 				instances.put(key, store);
 			}
 			return store;
@@ -91,19 +101,22 @@ public class ServletResourceStore implements ResourceStore {
 	/**
 	 * Gets a cached instance.
 	 *
-	 * @see  #getInstance(javax.servlet.ServletContext, java.lang.String, boolean)
+	 * @see  #getInstance(javax.servlet.ServletContext, com.aoindustries.net.Path)
 	 */
-	public static ServletResourceStore getInstance(ServletContext servletContext, String prefix) {
-		return getInstance(servletContext, prefix, true);
+	public static ServletResourceStore getInstance(ServletContext servletContext, Path path) {
+		return getInstance(servletContext, path, true);
 	}
 
 	final ServletContext servletContext;
+	final Path path;
 	final String prefix;
 	final ServletContextCache cache;
 
-	private ServletResourceStore(ServletContext servletContext, String prefix, boolean cached) {
+	private ServletResourceStore(ServletContext servletContext, Path path, boolean cached) {
 		this.servletContext = servletContext;
-		this.prefix = prefix;
+		this.path = path;
+		String pathStr = path.toString();
+		this.prefix = pathStr.equals("/") ? "" : pathStr;
 		this.cache = cached ? ServletContextCache.getCache(servletContext) : null;
 	}
 
@@ -111,6 +124,16 @@ public class ServletResourceStore implements ResourceStore {
 		return servletContext;
 	}
 
+	/**
+	 * Gets the path, without any trailing slash except for "/".
+	 */
+	public Path getPath() {
+		return path;
+	}
+
+	/**
+	 * Gets the prefix useful for direct path concatenation, which is the path itself except empty string for "/".
+	 */
 	public String getPrefix() {
 		return prefix;
 	}
@@ -121,7 +144,7 @@ public class ServletResourceStore implements ResourceStore {
 	}
 
 	@Override
-	public ServletResource getResource(String path) {
+	public ServletResource getResource(Path path) {
 		return new ServletResource(this, path);
 	}
 }

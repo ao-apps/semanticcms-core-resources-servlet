@@ -22,6 +22,7 @@
  */
 package com.semanticcms.core.resources.servlet;
 
+import com.aoindustries.net.Path;
 import com.aoindustries.servlet.ServletContextCache;
 import com.semanticcms.core.resources.Resource;
 import java.io.File;
@@ -33,20 +34,21 @@ public class ServletResource extends Resource {
 	final ServletContextCache cache;
 	final String servletPath;
 
-	public ServletResource(ServletResourceStore store, String path) {
+	public ServletResource(ServletResourceStore store, Path path) {
 		super(store, path);
 		this.servletContext = store.servletContext;
 		this.cache = store.cache;
 		String prefix = store.prefix;
+		String pathStr = path.toString();
 		int prefixLen = prefix.length();
 		if(prefixLen == 0) {
-			this.servletPath = path;
+			this.servletPath = pathStr;
 		} else {
-			int len = prefixLen + path.length();
+			int len = prefixLen + pathStr.length();
 			this.servletPath =
 				new StringBuilder(len)
 				.append(prefix)
-				.append(path)
+				.append(pathStr)
 				.toString()
 			;
 			assert servletPath.length() == len;

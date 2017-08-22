@@ -144,6 +144,11 @@ public class ServletResourceStore implements ResourceStore {
 	}
 
 	@Override
+	public boolean isAvailable() {
+		return true;
+	}
+
+	@Override
 	public ServletResource getResource(Path path) {
 		return new ServletResource(this, path);
 	}

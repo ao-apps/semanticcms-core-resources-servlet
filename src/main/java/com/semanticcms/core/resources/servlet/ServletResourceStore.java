@@ -1,6 +1,6 @@
 /*
  * semanticcms-core-resources-servlet - Redistributable sets of SemanticCMS resources produced by the local servlet container.
- * Copyright (C) 2017  AO Industries, Inc.
+ * Copyright (C) 2017, 2018  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -150,6 +150,8 @@ public class ServletResourceStore implements ResourceStore {
 
 	@Override
 	public ServletResource getResource(Path path) {
+		// TODO: If path starts with /WEB-INF(/.*) or /META-INF(/.*) (case-insensitive), always not found?
+		// TODO: What if we had a local book, not published, contained in /WEB-INF/?
 		return new ServletResource(this, path);
 	}
 }

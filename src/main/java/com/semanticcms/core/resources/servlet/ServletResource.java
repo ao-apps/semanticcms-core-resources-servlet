@@ -1,6 +1,6 @@
 /*
  * semanticcms-core-resources-servlet - Redistributable sets of SemanticCMS resources produced by the local servlet container.
- * Copyright (C) 2017  AO Industries, Inc.
+ * Copyright (C) 2017, 2018  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -28,6 +28,11 @@ import com.semanticcms.core.resources.Resource;
 import java.io.File;
 import javax.servlet.ServletContext;
 
+// TODO: Expose a way to dispatch to default servlet (or just the resource servletpath)
+//       instead of serving through ResourceServlet?  This would have the side-effect of
+//       potentially exposing other things mapped over this resource servletPath, which may
+//       or may not be desirable.  Is this a more predictable default behavior, so servlet
+//       resources remain more natural?  Security implications?  Performance implications?
 public class ServletResource extends Resource {
 
 	final ServletContext servletContext;

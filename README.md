@@ -1,4 +1,4 @@
-# [<img src="ao-logo.png" alt="AO Logo" width="35" height="40">](https://aoindustries.com/) [SemanticCMS](https://semanticcms.com/) / [Core](https://semanticcms.com/core/) / [Resources](https://semanticcms.com/core/resources/) / [Servlet](https://semanticcms.com/core/resources/servlet/)
+# [<img src="ao-logo.png" alt="AO Logo" width="35" height="40">](https://github.com/aoindustries) [SemanticCMS](https://github.com/aoindustries/semanticcms) / [Core](https://github.com/aoindustries/semanticcms-core) / [Resources](https://github.com/aoindustries/semanticcms-core-resources) / [Servlet](https://github.com/aoindustries/semanticcms-core-resources-servlet)
 <p>
 	<a href="https://aoindustries.com/life-cycle#project-alpha">
 		<img src="https://semanticcms.com/ao-badges/project-alpha.svg" alt="project: alpha" />
@@ -24,7 +24,7 @@
 	</a>
 </p>
 
-Redistributable sets of [SemanticCMS](https://semanticcms.com/) resources produced by the local servlet container.
+Redistributable sets of [SemanticCMS](https://github.com/aoindustries/semanticcms) resources produced by the local servlet container.
 
 ## Project Links
 * [Project Home](https://semanticcms.com/core/resources/servlet/)

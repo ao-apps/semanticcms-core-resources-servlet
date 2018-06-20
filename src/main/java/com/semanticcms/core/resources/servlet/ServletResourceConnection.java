@@ -1,6 +1,6 @@
 /*
  * semanticcms-core-resources-servlet - Redistributable sets of SemanticCMS resources produced by the local servlet container.
- * Copyright (C) 2017  AO Industries, Inc.
+ * Copyright (C) 2017, 2018  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -128,7 +128,7 @@ public class ServletResourceConnection extends ResourceConnection {
 		File file = getContextFile();
 		if(file != null) {
 			// Note: non-null from getContextFile means exists.
-			// TODO: Java 1.7: Handle 0 as unknown to convert to -1: Files.readAttributes
+			// Java 1.7: Handle 0 as unknown to convert to -1: Files.readAttributes
 			//                 Could do some reflection tricks to avoid hard dependency on Java 1.7, or just bump our java version globally.
 			return file.length();
 		} else {
@@ -136,7 +136,7 @@ public class ServletResourceConnection extends ResourceConnection {
 			URL url = getContextUrl();
 			if(url == null) throw new FileNotFoundException(resource.toString());
 			if(urlConn == null) urlConn = url.openConnection();
-			// TODO: Java 1.7: getContentLengthLong(), could do now with reflection
+			// Java 1.7: getContentLengthLong(), could do now with reflection
 			return urlConn.getContentLength();
 		}
 	}

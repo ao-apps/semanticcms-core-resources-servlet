@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 semanticcms-core-resources-servlet - Redistributable sets of SemanticCMS resources produced by the local servlet container.
-Copyright (C) 2017, 2018  AO Industries, Inc.
+Copyright (C) 2017, 2018, 2019  AO Industries, Inc.
     support@aoindustries.com
     7262 Bull Pen Cir
     Mobile, AL 36695
@@ -41,7 +41,7 @@ along with semanticcms-core-resources-servlet.  If not, see <http://www.gnu.org/
 		<description.html><![CDATA[Redistributable sets of <a target="_top" href="https://semanticcms.com/">SemanticCMS</a> resources produced by the local servlet container.]]></description.html>
 	</properties>
 
-	<name>SemanticCMS Core Resources Servlet</name>
+	<name>SemanticCMS 2 Core Resources Servlet</name>
 	<url>https://semanticcms.com/core/resources/servlet/</url>
 	<description>Redistributable sets of SemanticCMS resources produced by the local servlet container.</description>
 	<inceptionYear>2017</inceptionYear>

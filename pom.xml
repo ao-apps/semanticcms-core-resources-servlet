@@ -65,11 +65,11 @@ along with semanticcms-core-resources-servlet.  If not, see <http://www.gnu.org/
 							<links>
 								<link>${javac.link.javaApi}</link>
 								<link>${javac.link.javaeeApi.6}</link>
-								<link>https://aoindustries.com/ao-lang/apidocs</link>
-								<link>https://aoindustries.com/ao-net-types/apidocs</link>
-								<link>https://aoindustries.com/ao-tempfiles/apidocs</link>
-								<link>https://aoindustries.com/aocode-public/apidocs</link>
-								<link>https://semanticcms.com/core/resources/apidocs</link>
+								<link>https://aoindustries.com/ao-lang/apidocs/</link>
+								<link>https://aoindustries.com/ao-net-types/apidocs/</link>
+								<link>https://aoindustries.com/ao-tempfiles/apidocs/</link>
+								<link>https://aoindustries.com/aocode-public/apidocs/</link>
+								<link>https://semanticcms.com/core/resources/apidocs/</link>
 							</links>
 						</configuration>
 					</plugin>

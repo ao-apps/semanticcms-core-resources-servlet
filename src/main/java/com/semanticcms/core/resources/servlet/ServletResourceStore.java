@@ -1,6 +1,6 @@
 /*
  * semanticcms-core-resources-servlet - Redistributable sets of SemanticCMS resources produced by the local servlet container.
- * Copyright (C) 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -73,13 +73,13 @@ public class ServletResourceStore implements ResourceStore {
 			@SuppressWarnings("unchecked")
 			Map<Tuple2<Path,Boolean>,ServletResourceStore> map = (Map<Tuple2<Path,Boolean>,ServletResourceStore>)servletContext.getAttribute(INSTANCES_SERVLET_CONTEXT_KEY);
 			if(map == null) {
-				map = new HashMap<Tuple2<Path,Boolean>,ServletResourceStore>();
+				map = new HashMap<>();
 				servletContext.setAttribute(INSTANCES_SERVLET_CONTEXT_KEY, map);
 			}
 			instances = map;
 		}
 		synchronized(instances) {
-			Tuple2<Path,Boolean> key = new Tuple2<Path,Boolean>(path, cached);
+			Tuple2<Path,Boolean> key = new Tuple2<>(path, cached);
 			ServletResourceStore store = instances.get(key);
 			if(store == null) {
 				store = new ServletResourceStore(servletContext, path, cached);

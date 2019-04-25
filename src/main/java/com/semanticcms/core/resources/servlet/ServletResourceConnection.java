@@ -1,6 +1,6 @@
 /*
  * semanticcms-core-resources-servlet - Redistributable sets of SemanticCMS resources produced by the local servlet container.
- * Copyright (C) 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -128,16 +128,14 @@ public class ServletResourceConnection extends ResourceConnection {
 		File file = getContextFile();
 		if(file != null) {
 			// Note: non-null from getContextFile means exists.
-			// Java 1.7: Handle 0 as unknown to convert to -1: Files.readAttributes
-			//                 Could do some reflection tricks to avoid hard dependency on Java 1.7, or just bump our java version globally.
+			// TODO: Handle 0 as unknown to convert to -1: Files.readAttributes
 			return file.length();
 		} else {
 			// Handle as URL
 			URL url = getContextUrl();
 			if(url == null) throw new FileNotFoundException(resource.toString());
 			if(urlConn == null) urlConn = url.openConnection();
-			// Java 1.7: getContentLengthLong(), could do now with reflection
-			return urlConn.getContentLength();
+			return urlConn.getContentLengthLong();
 		}
 	}
 
@@ -200,17 +198,12 @@ public class ServletResourceConnection extends ResourceConnection {
 						);
 					}
 					tempFile = tempFileContext.createTempFile(ServletResourceConnection.class.getName(), null);
-					FileOutputStream tmpOut = new FileOutputStream(tempFile.getFile());
-					try {
-						InputStream urlIn = urlConn.getInputStream();
-						try {
-							urlConnInputAccessed = true;
-							IoUtils.copy(urlIn, tmpOut);
-						} finally {
-							urlIn.close();
-						}
-					} finally {
-						tmpOut.close();
+					try (
+						FileOutputStream tmpOut = new FileOutputStream(tempFile.getFile());
+						InputStream urlIn = urlConn.getInputStream()
+					) {
+						urlConnInputAccessed = true;
+						IoUtils.copy(urlIn, tmpOut);
 					}
 					success = true;
 				} finally {
@@ -230,11 +223,8 @@ public class ServletResourceConnection extends ResourceConnection {
 		if(in != null) in.close();
 		if(urlConn != null && !urlConnInputAccessed) {
 			// Close input if not accessed to let underlying URLConnection close.
-			InputStream urlIn = urlConn.getInputStream();
-			try {
+			try (InputStream urlIn = urlConn.getInputStream()) {
 				urlConnInputAccessed = true;
-			} finally {
-				urlIn.close();
 			}
 		}
 		// Closed with its context

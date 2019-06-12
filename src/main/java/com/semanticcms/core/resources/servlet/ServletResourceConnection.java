@@ -224,6 +224,7 @@ public class ServletResourceConnection extends ResourceConnection {
 		if(urlConn != null && !urlConnInputAccessed) {
 			// Close input if not accessed to let underlying URLConnection close.
 			try (InputStream urlIn = urlConn.getInputStream()) {
+				assert urlIn == urlIn : "This assert is to avoid compiler warning: auto-closeable resource urlIn is never referenced in body of corresponding try statement";
 				urlConnInputAccessed = true;
 			}
 		}

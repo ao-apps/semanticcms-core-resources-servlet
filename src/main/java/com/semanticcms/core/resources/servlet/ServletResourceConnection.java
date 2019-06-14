@@ -142,16 +142,37 @@ public class ServletResourceConnection extends ResourceConnection {
 	@Override
 	public long getLastModified() throws IOException, FileNotFoundException, IllegalStateException {
 		if(closed) throw new IllegalStateException("Connection closed: " + resource);
-		File file = getContextFile();
-		if(file != null) {
-			// Note: non-null from getContextFile means exists.
-			return file.lastModified();
+		if(cache == null) {
+			// Not using cache
+			File file = getContextFile();
+			if(file != null) {
+				// Note: non-null from getContextFile means exists.
+				return file.lastModified();
+			} else {
+				// Handle as URL
+				URL url = getContextUrl();
+				if(url == null) throw new FileNotFoundException(resource.toString());
+				if(urlConn == null) urlConn = url.openConnection();
+				return urlConn.getLastModified();
+			}
 		} else {
-			// Handle as URL
-			URL url = getContextUrl();
-			if(url == null) throw new FileNotFoundException(resource.toString());
-			if(urlConn == null) urlConn = url.openConnection();
-			return urlConn.getLastModified();
+			// Using cache
+			long lastModified = cache.getLastModified(servletPath);
+			if(
+				// When lastModified != 0, it is assumed the resource exists
+				lastModified == 0
+			) {
+				// Look for possible FileNotFound
+				if(
+					// Note: non-null from getContextFile means exists.
+					getContextFile() == null
+					// Handle as URL
+					&& getContextUrl() == null
+				) {
+					throw new FileNotFoundException(resource.toString());
+				}
+			}
+			return lastModified;
 		}
 	}
 

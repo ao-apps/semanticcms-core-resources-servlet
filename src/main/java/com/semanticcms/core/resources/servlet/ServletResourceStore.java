@@ -1,6 +1,6 @@
 /*
  * semanticcms-core-resources-servlet - Redistributable sets of SemanticCMS resources produced by the local servlet container.
- * Copyright (C) 2017, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2017, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -26,9 +26,12 @@ import com.aoindustries.net.Path;
 import com.aoindustries.servlet.ServletContextCache;
 import com.aoindustries.util.Tuple2;
 import com.semanticcms.core.resources.ResourceStore;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
 /**
  * Accesses resources in the local {@link ServletContext}.
@@ -46,7 +49,29 @@ import javax.servlet.ServletContext;
  */
 public class ServletResourceStore implements ResourceStore {
 
-	private static final String INSTANCES_SERVLET_CONTEXT_KEY = ServletResourceStore.class.getName() + ".instances";
+	@WebListener
+	public static class Initializer implements ServletContextListener {
+		@Override
+		public void contextInitialized(ServletContextEvent event) {
+			getInstances(event.getServletContext());
+		}
+		@Override
+		public void contextDestroyed(ServletContextEvent event) {
+			// Do nothing
+		}
+	}
+
+	private static final String INSTANCES_APPLICATION_ATTRIBUTE = ServletResourceStore.class.getName() + ".instances";
+
+	private static ConcurrentMap<Tuple2<Path,Boolean>,ServletResourceStore> getInstances(ServletContext servletContext) {
+		@SuppressWarnings("unchecked")
+		ConcurrentMap<Tuple2<Path,Boolean>,ServletResourceStore> instances = (ConcurrentMap<Tuple2<Path,Boolean>,ServletResourceStore>)servletContext.getAttribute(INSTANCES_APPLICATION_ATTRIBUTE);
+		if(instances == null) {
+			instances = new ConcurrentHashMap<>();
+			servletContext.setAttribute(INSTANCES_APPLICATION_ATTRIBUTE, instances);
+		}
+		return instances;
+	}
 
 	/**
 	 * Gets the servlet store for the given context and prefix.
@@ -68,25 +93,15 @@ public class ServletResourceStore implements ResourceStore {
 			}
 		}
 
-		Map<Tuple2<Path,Boolean>,ServletResourceStore> instances;
-		synchronized(servletContext) {
-			@SuppressWarnings("unchecked")
-			Map<Tuple2<Path,Boolean>,ServletResourceStore> map = (Map<Tuple2<Path,Boolean>,ServletResourceStore>)servletContext.getAttribute(INSTANCES_SERVLET_CONTEXT_KEY);
-			if(map == null) {
-				map = new HashMap<>();
-				servletContext.setAttribute(INSTANCES_SERVLET_CONTEXT_KEY, map);
-			}
-			instances = map;
+		ConcurrentMap<Tuple2<Path,Boolean>,ServletResourceStore> instances = getInstances(servletContext);
+		Tuple2<Path,Boolean> key = new Tuple2<>(path, cached);
+		ServletResourceStore store = instances.get(key);
+		if(store == null) {
+			store = new ServletResourceStore(servletContext, path, cached);
+			ServletResourceStore existing = instances.putIfAbsent(key, store);
+			if(existing != null) store = existing;
 		}
-		synchronized(instances) {
-			Tuple2<Path,Boolean> key = new Tuple2<>(path, cached);
-			ServletResourceStore store = instances.get(key);
-			if(store == null) {
-				store = new ServletResourceStore(servletContext, path, cached);
-				instances.put(key, store);
-			}
-			return store;
-		}
+		return store;
 	}
 
 	/**

@@ -123,7 +123,7 @@ public class ServletResourceStore implements ResourceStore {
 		this.path = path;
 		String pathStr = path.toString();
 		this.prefix = pathStr.equals("/") ? "" : pathStr;
-		this.cache = cached ? ServletContextCache.getCache(servletContext) : null;
+		this.cache = cached ? ServletContextCache.getInstance(servletContext) : null;
 	}
 
 	public ServletContext getServletContext() {

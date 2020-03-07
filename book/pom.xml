@@ -35,8 +35,6 @@ along with semanticcms-core-resources-servlet.  If not, see <http://www.gnu.org/
 	<properties>
 		<!-- These values are copied from the project being documented -->
 		<documented.artifactId>semanticcms-core-resources-servlet</documented.artifactId>
-		<documented.javaVersion>1.8</documented.javaVersion>
-		<documented.javac.link.javaApi>${javac.link.javaApi.jdk8}</documented.javac.link.javaApi>
 		<documented.name>SemanticCMS Core Resources Servlet²</documented.name>
 		<documented.shortTitle>Servlet</documented.shortTitle>
 		<documented.description>Redistributable sets of SemanticCMS resources produced by the local servlet container.</documented.description>

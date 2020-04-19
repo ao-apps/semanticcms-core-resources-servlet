@@ -33,12 +33,12 @@ along with semanticcms-core-resources-servlet.  If not, see <http://www.gnu.org/
 	<packaging>bundle</packaging>
 
 	<properties>
-		<javadoc.breadcrumbs><![CDATA[<a target="_top" href="https://semanticcms.com/">SemanticCMS</a>
-/ <a target="_top" href="https://semanticcms.com/core/">Core</a>
-/ <a target="_top" href="https://semanticcms.com/core/resources/">Resources</a>
-/ <a target="_top" href="${project.url}">${shortTitle}</a>]]></javadoc.breadcrumbs>
+		<javadoc.breadcrumbs><![CDATA[<a target="${javadoc.target}" href="https://semanticcms.com/">SemanticCMS</a>
+/ <a target="${javadoc.target}" href="https://semanticcms.com/core/">Core</a>
+/ <a target="${javadoc.target}" href="https://semanticcms.com/core/resources/">Resources</a>
+/ <a target="${javadoc.target}" href="${project.url}">${shortTitle}</a>]]></javadoc.breadcrumbs>
 		<shortTitle>Servlet</shortTitle>
-		<description.html><![CDATA[Redistributable sets of <a target="_top" href="https://semanticcms.com/">SemanticCMS</a> resources produced by the local servlet container.]]></description.html>
+		<description.html><![CDATA[Redistributable sets of <a target="${javadoc.target}" href="https://semanticcms.com/">SemanticCMS</a> resources produced by the local servlet container.]]></description.html>
 	</properties>
 
 	<name>SemanticCMS Core Resources Servlet²</name>

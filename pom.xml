@@ -76,7 +76,7 @@ along with semanticcms-core-resources-servlet.  If not, see <http://www.gnu.org/
 								<link>https://aoindustries.com/ao-servlet-util/apidocs/</link>
 								<link>https://aoindustries.com/ao-tempfiles/apidocs/</link>
 								<link>https://aoindustries.com/aocode-public/apidocs/</link>
-								<link>https://semanticcms.com/core/resources/apidocs/</link>
+								<!-- TODO: Once published: <link>https://semanticcms.com/core/resources/apidocs/</link> -->
 							</links>
 						</configuration>
 					</plugin>

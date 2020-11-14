@@ -1,6 +1,6 @@
 /*
  * semanticcms-core-resources-servlet - Redistributable sets of SemanticCMS resources produced by the local servlet container.
- * Copyright (C) 2017, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2017, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,7 +22,7 @@
  */
 package com.semanticcms.core.resources.servlet;
 
-import com.aoindustries.io.IoUtils;
+import com.aoindustries.io.FileUtils;
 import com.aoindustries.servlet.ServletContextCache;
 import com.aoindustries.tempfiles.TempFile;
 import com.aoindustries.tempfiles.TempFileContext;
@@ -30,7 +30,6 @@ import com.semanticcms.core.resources.ResourceConnection;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -219,12 +218,9 @@ public class ServletResourceConnection extends ResourceConnection {
 						);
 					}
 					tempFile = tempFileContext.createTempFile(ServletResourceConnection.class.getName(), null);
-					try (
-						FileOutputStream tmpOut = new FileOutputStream(tempFile.getFile());
-						InputStream urlIn = urlConn.getInputStream()
-					) {
+					try (InputStream urlIn = urlConn.getInputStream()) {
 						urlConnInputAccessed = true;
-						IoUtils.copy(urlIn, tmpOut);
+						FileUtils.copyToFile(urlIn, tempFile.getFile());
 					}
 					success = true;
 				} finally {

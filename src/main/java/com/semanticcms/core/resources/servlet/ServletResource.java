@@ -1,6 +1,6 @@
 /*
  * semanticcms-core-resources-servlet - Redistributable sets of SemanticCMS resources produced by the local servlet container.
- * Copyright (C) 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2017, 2018, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -71,8 +71,6 @@ public class ServletResource extends Resource {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 *
 	 * @see  ServletContext#getRealPath(java.lang.String)
 	 */
 	@Override

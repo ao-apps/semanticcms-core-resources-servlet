@@ -1,6 +1,6 @@
 /*
  * semanticcms-core-resources-servlet - Redistributable sets of SemanticCMS resources produced by the local servlet container.
- * Copyright (C) 2017, 2018, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2017, 2018, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -63,9 +63,9 @@ public class ServletResourceStore implements ResourceStore {
 
 	private static final String INSTANCES_APPLICATION_ATTRIBUTE = ServletResourceStore.class.getName() + ".instances";
 
-	private static ConcurrentMap<Tuple2<Path,Boolean>,ServletResourceStore> getInstances(ServletContext servletContext) {
+	private static ConcurrentMap<Tuple2<Path, Boolean>, ServletResourceStore> getInstances(ServletContext servletContext) {
 		@SuppressWarnings("unchecked")
-		ConcurrentMap<Tuple2<Path,Boolean>,ServletResourceStore> instances = (ConcurrentMap<Tuple2<Path,Boolean>,ServletResourceStore>)servletContext.getAttribute(INSTANCES_APPLICATION_ATTRIBUTE);
+		ConcurrentMap<Tuple2<Path, Boolean>, ServletResourceStore> instances = (ConcurrentMap<Tuple2<Path, Boolean>, ServletResourceStore>)servletContext.getAttribute(INSTANCES_APPLICATION_ATTRIBUTE);
 		if(instances == null) {
 			instances = new ConcurrentHashMap<>();
 			servletContext.setAttribute(INSTANCES_APPLICATION_ATTRIBUTE, instances);
@@ -93,8 +93,8 @@ public class ServletResourceStore implements ResourceStore {
 			}
 		}
 
-		ConcurrentMap<Tuple2<Path,Boolean>,ServletResourceStore> instances = getInstances(servletContext);
-		Tuple2<Path,Boolean> key = new Tuple2<>(path, cached);
+		ConcurrentMap<Tuple2<Path, Boolean>, ServletResourceStore> instances = getInstances(servletContext);
+		Tuple2<Path, Boolean> key = new Tuple2<>(path, cached);
 		ServletResourceStore store = instances.get(key);
 		if(store == null) {
 			store = new ServletResourceStore(servletContext, path, cached);

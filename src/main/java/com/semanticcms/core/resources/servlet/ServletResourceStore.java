@@ -22,9 +22,9 @@
  */
 package com.semanticcms.core.resources.servlet;
 
-import com.aoindustries.net.Path;
-import com.aoindustries.servlet.ServletContextCache;
-import com.aoindustries.util.Tuple2;
+import com.aoapps.hodgepodge.util.Tuple2;
+import com.aoapps.net.Path;
+import com.aoapps.servlet.ServletContextCache;
 import com.semanticcms.core.resources.ResourceStore;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -107,7 +107,7 @@ public class ServletResourceStore implements ResourceStore {
 	/**
 	 * Gets a cached instance.
 	 *
-	 * @see  #getInstance(javax.servlet.ServletContext, com.aoindustries.net.Path)
+	 * @see  #getInstance(javax.servlet.ServletContext, com.aoapps.net.Path)
 	 */
 	public static ServletResourceStore getInstance(ServletContext servletContext, Path path) {
 		return getInstance(servletContext, path, true);

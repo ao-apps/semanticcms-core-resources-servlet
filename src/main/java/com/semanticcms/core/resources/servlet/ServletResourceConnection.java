@@ -1,6 +1,6 @@
 /*
  * semanticcms-core-resources-servlet - Redistributable sets of SemanticCMS resources produced by the local servlet container.
- * Copyright (C) 2017, 2018, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2017, 2018, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -22,10 +22,10 @@
  */
 package com.semanticcms.core.resources.servlet;
 
-import com.aoindustries.io.FileUtils;
-import com.aoindustries.servlet.ServletContextCache;
-import com.aoindustries.tempfiles.TempFile;
-import com.aoindustries.tempfiles.TempFileContext;
+import com.aoapps.lang.io.FileUtils;
+import com.aoapps.servlet.ServletContextCache;
+import com.aoapps.tempfiles.TempFile;
+import com.aoapps.tempfiles.TempFileContext;
 import com.semanticcms.core.resources.ResourceConnection;
 import java.io.File;
 import java.io.FileInputStream;

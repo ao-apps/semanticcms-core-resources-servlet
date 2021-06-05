@@ -181,19 +181,19 @@ along with semanticcms-core-resources-servlet.  If not, see <http://www.gnu.org/
 		<dependencies>
 			<!-- Direct -->
 			<dependency>
-				<groupId>com.aoapps</groupId><artifactId>ao-hodgepodge</artifactId><version>4.9.2-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
+				<groupId>com.aoapps</groupId><artifactId>ao-hodgepodge</artifactId><version>5.0.0-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
 			</dependency>
 			<dependency>
-				<groupId>com.aoapps</groupId><artifactId>ao-lang</artifactId><version>4.17.1-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
+				<groupId>com.aoapps</groupId><artifactId>ao-lang</artifactId><version>5.0.0-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
 			</dependency>
 			<dependency>
-				<groupId>com.aoapps</groupId><artifactId>ao-net-types</artifactId><version>1.3.1-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
+				<groupId>com.aoapps</groupId><artifactId>ao-net-types</artifactId><version>2.0.0-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
 			</dependency>
 			<dependency>
-				<groupId>com.aoapps</groupId><artifactId>ao-servlet-util</artifactId><version>3.6.0-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
+				<groupId>com.aoapps</groupId><artifactId>ao-servlet-util</artifactId><version>4.0.0-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
 			</dependency>
 			<dependency>
-				<groupId>com.aoapps</groupId><artifactId>ao-tempfiles</artifactId><version>2.0.1-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
+				<groupId>com.aoapps</groupId><artifactId>ao-tempfiles</artifactId><version>3.0.0-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
 			</dependency>
 			<!-- javaee-web-api-bom: <groupId>javax.servlet</groupId><artifactId>javax.servlet-api</artifactId> -->
 			<dependency>
@@ -201,10 +201,10 @@ along with semanticcms-core-resources-servlet.  If not, see <http://www.gnu.org/
 			</dependency>
 			<!-- Transitive -->
 			<dependency>
-				<groupId>com.aoapps</groupId><artifactId>ao-collections</artifactId><version>1.2.1-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
+				<groupId>com.aoapps</groupId><artifactId>ao-collections</artifactId><version>2.0.0-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
 			</dependency>
 			<dependency>
-				<groupId>com.aoapps</groupId><artifactId>ao-tlds</artifactId><version>1.2.1-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
+				<groupId>com.aoapps</groupId><artifactId>ao-tlds</artifactId><version>2.0.0-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId><version>3.12.0</version>

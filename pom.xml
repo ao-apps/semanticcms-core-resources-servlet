@@ -39,6 +39,10 @@ along with semanticcms-core-resources-servlet.  If not, see <http://www.gnu.org/
 / <a target="${javadoc.target}" href="https://semanticcms.com/core/resources/">Resources</a>
 / <a target="${javadoc.target}" href="${project.url}">Servlet</a>]]></javadoc.breadcrumbs>
 		<description.html><![CDATA[Redistributable sets of <a target="${javadoc.target}" href="https://semanticcms.com/">SemanticCMS</a> resources produced by the local servlet container.]]></description.html>
+		<!-- SonarCloud.io -->
+		<sonar.projectKey>${project.groupId}:${project.artifactId}</sonar.projectKey>
+		<sonar.organization>aoindustries</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
 	<name>SemanticCMS Core Resources Servlet²</name>

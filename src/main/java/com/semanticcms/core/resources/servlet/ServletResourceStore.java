@@ -24,6 +24,7 @@ package com.semanticcms.core.resources.servlet;
 
 import com.aoapps.hodgepodge.util.Tuple2;
 import com.aoapps.net.Path;
+import com.aoapps.servlet.attribute.ScopeEE;
 import com.aoapps.servlet.ServletContextCache;
 import com.semanticcms.core.resources.ResourceStore;
 import java.util.concurrent.ConcurrentHashMap;
@@ -61,16 +62,11 @@ public class ServletResourceStore implements ResourceStore {
 		}
 	}
 
-	private static final String INSTANCES_APPLICATION_ATTRIBUTE = ServletResourceStore.class.getName() + ".instances";
+	private static final ScopeEE.Application.Attribute<ConcurrentMap<Tuple2<Path, Boolean>, ServletResourceStore>> INSTANCES_APPLICATION_ATTRIBUTE =
+		ScopeEE.APPLICATION.attribute(ServletResourceStore.class.getName() + ".instances");
 
 	private static ConcurrentMap<Tuple2<Path, Boolean>, ServletResourceStore> getInstances(ServletContext servletContext) {
-		@SuppressWarnings("unchecked")
-		ConcurrentMap<Tuple2<Path, Boolean>, ServletResourceStore> instances = (ConcurrentMap<Tuple2<Path, Boolean>, ServletResourceStore>)servletContext.getAttribute(INSTANCES_APPLICATION_ATTRIBUTE);
-		if(instances == null) {
-			instances = new ConcurrentHashMap<>();
-			servletContext.setAttribute(INSTANCES_APPLICATION_ATTRIBUTE, instances);
-		}
-		return instances;
+		return INSTANCES_APPLICATION_ATTRIBUTE.context(servletContext).computeIfAbsent(__ -> new ConcurrentHashMap<>());
 	}
 
 	/**

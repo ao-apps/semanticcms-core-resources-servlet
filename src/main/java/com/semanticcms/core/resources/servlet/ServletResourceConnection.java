@@ -24,6 +24,7 @@ package com.semanticcms.core.resources.servlet;
 
 import com.aoapps.lang.io.FileUtils;
 import com.aoapps.servlet.ServletContextCache;
+import com.aoapps.servlet.attribute.ScopeEE;
 import com.aoapps.tempfiles.TempFile;
 import com.aoapps.tempfiles.TempFileContext;
 import com.semanticcms.core.resources.ResourceConnection;
@@ -214,7 +215,7 @@ public class ServletResourceConnection extends ResourceConnection {
 				try {
 					if(tempFileContext == null) {
 						tempFileContext = new TempFileContext(
-							(File)servletContext.getAttribute(ServletContext.TEMPDIR) // javax.servlet.context.tempdir
+							ScopeEE.Application.TEMPDIR.context(servletContext).get()
 						);
 					}
 					tempFile = tempFileContext.createTempFile(ServletResourceConnection.class.getName(), null);

@@ -249,7 +249,7 @@ along with semanticcms-core-resources-servlet.  If not, see <http://www.gnu.org/
 			<!-- javaee-web-api-bom: <groupId>javax.servlet.jsp</groupId><artifactId>javax.servlet.jsp-api</artifactId> -->
 			<!-- BOM -->
 			<dependency>
-				<groupId>com.aoapps</groupId><artifactId>javaee-web-api-bom</artifactId><version>7.0.1-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
+				<groupId>com.aoapps</groupId><artifactId>javaee-web-api-bom</artifactId><version>7.0.1${POST-SNAPSHOT}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>

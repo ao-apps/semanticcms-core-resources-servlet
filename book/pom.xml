@@ -96,9 +96,6 @@ along with semanticcms-core-resources-servlet.  If not, see <https://www.gnu.org
 			<releases>
 				<enabled>false</enabled>
 			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
 		</repository>
 	</repositories>
 

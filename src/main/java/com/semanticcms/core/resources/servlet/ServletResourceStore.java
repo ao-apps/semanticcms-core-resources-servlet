@@ -51,110 +51,112 @@ import javax.servlet.annotation.WebListener;
  */
 public class ServletResourceStore implements ResourceStore {
 
-	@WebListener
-	public static class Initializer implements ServletContextListener {
-		@Override
-		public void contextInitialized(ServletContextEvent event) {
-			getInstances(event.getServletContext());
-		}
-		@Override
-		public void contextDestroyed(ServletContextEvent event) {
-			// Do nothing
-		}
-	}
+  @WebListener
+  public static class Initializer implements ServletContextListener {
+    @Override
+    public void contextInitialized(ServletContextEvent event) {
+      getInstances(event.getServletContext());
+    }
+    @Override
+    public void contextDestroyed(ServletContextEvent event) {
+      // Do nothing
+    }
+  }
 
-	private static final ScopeEE.Application.Attribute<ConcurrentMap<Tuple2<Path, Boolean>, ServletResourceStore>> INSTANCES_APPLICATION_ATTRIBUTE =
-		ScopeEE.APPLICATION.attribute(ServletResourceStore.class.getName() + ".instances");
+  private static final ScopeEE.Application.Attribute<ConcurrentMap<Tuple2<Path, Boolean>, ServletResourceStore>> INSTANCES_APPLICATION_ATTRIBUTE =
+    ScopeEE.APPLICATION.attribute(ServletResourceStore.class.getName() + ".instances");
 
-	private static ConcurrentMap<Tuple2<Path, Boolean>, ServletResourceStore> getInstances(ServletContext servletContext) {
-		return INSTANCES_APPLICATION_ATTRIBUTE.context(servletContext).computeIfAbsent(__ -> new ConcurrentHashMap<>());
-	}
+  private static ConcurrentMap<Tuple2<Path, Boolean>, ServletResourceStore> getInstances(ServletContext servletContext) {
+    return INSTANCES_APPLICATION_ATTRIBUTE.context(servletContext).computeIfAbsent(__ -> new ConcurrentHashMap<>());
+  }
 
-	/**
-	 * Gets the servlet store for the given context and prefix.
-	 * Only one {@link ServletResourceStore} is created per unique context and prefix.
-	 *
-	 * @param  path  Must be a {@link Path valid path}.
-	 *               Any trailing slash "/" will be stripped.
-	 *
-	 * @param cached  Enables use of {@link ServletContextCache} to workaround some performance issues with direct use of {@link ServletContext},
-	 *                but introduces a potential delay of up to {@link ServletContextCache#REFRESH_INTERVAL} milliseconds (current 5 seconds)
-	 *                before new or moved content becomes visible.
-	 */
-	public static ServletResourceStore getInstance(ServletContext servletContext, Path path, boolean cached) {
-		// Strip trailing '/' to normalize
-		{
-			String pathStr = path.toString();
-			if(!pathStr.equals("/") && pathStr.endsWith("/")) {
-				path = path.prefix(pathStr.length() - 1);
-			}
-		}
+  /**
+   * Gets the servlet store for the given context and prefix.
+   * Only one {@link ServletResourceStore} is created per unique context and prefix.
+   *
+   * @param  path  Must be a {@link Path valid path}.
+   *               Any trailing slash "/" will be stripped.
+   *
+   * @param cached  Enables use of {@link ServletContextCache} to workaround some performance issues with direct use of {@link ServletContext},
+   *                but introduces a potential delay of up to {@link ServletContextCache#REFRESH_INTERVAL} milliseconds (current 5 seconds)
+   *                before new or moved content becomes visible.
+   */
+  public static ServletResourceStore getInstance(ServletContext servletContext, Path path, boolean cached) {
+    // Strip trailing '/' to normalize
+    {
+      String pathStr = path.toString();
+      if (!pathStr.equals("/") && pathStr.endsWith("/")) {
+        path = path.prefix(pathStr.length() - 1);
+      }
+    }
 
-		ConcurrentMap<Tuple2<Path, Boolean>, ServletResourceStore> instances = getInstances(servletContext);
-		Tuple2<Path, Boolean> key = new Tuple2<>(path, cached);
-		ServletResourceStore store = instances.get(key);
-		if(store == null) {
-			store = new ServletResourceStore(servletContext, path, cached);
-			ServletResourceStore existing = instances.putIfAbsent(key, store);
-			if(existing != null) store = existing;
-		}
-		return store;
-	}
+    ConcurrentMap<Tuple2<Path, Boolean>, ServletResourceStore> instances = getInstances(servletContext);
+    Tuple2<Path, Boolean> key = new Tuple2<>(path, cached);
+    ServletResourceStore store = instances.get(key);
+    if (store == null) {
+      store = new ServletResourceStore(servletContext, path, cached);
+      ServletResourceStore existing = instances.putIfAbsent(key, store);
+      if (existing != null) {
+        store = existing;
+      }
+    }
+    return store;
+  }
 
-	/**
-	 * Gets a cached instance.
-	 *
-	 * @see  #getInstance(javax.servlet.ServletContext, com.aoapps.net.Path)
-	 */
-	public static ServletResourceStore getInstance(ServletContext servletContext, Path path) {
-		return getInstance(servletContext, path, true);
-	}
+  /**
+   * Gets a cached instance.
+   *
+   * @see  #getInstance(javax.servlet.ServletContext, com.aoapps.net.Path)
+   */
+  public static ServletResourceStore getInstance(ServletContext servletContext, Path path) {
+    return getInstance(servletContext, path, true);
+  }
 
-	final ServletContext servletContext;
-	final Path path;
-	final String prefix;
-	final ServletContextCache cache;
+  final ServletContext servletContext;
+  final Path path;
+  final String prefix;
+  final ServletContextCache cache;
 
-	private ServletResourceStore(ServletContext servletContext, Path path, boolean cached) {
-		this.servletContext = servletContext;
-		this.path = path;
-		String pathStr = path.toString();
-		this.prefix = pathStr.equals("/") ? "" : pathStr;
-		this.cache = cached ? ServletContextCache.getInstance(servletContext) : null;
-	}
+  private ServletResourceStore(ServletContext servletContext, Path path, boolean cached) {
+    this.servletContext = servletContext;
+    this.path = path;
+    String pathStr = path.toString();
+    this.prefix = pathStr.equals("/") ? "" : pathStr;
+    this.cache = cached ? ServletContextCache.getInstance(servletContext) : null;
+  }
 
-	public ServletContext getServletContext() {
-		return servletContext;
-	}
+  public ServletContext getServletContext() {
+    return servletContext;
+  }
 
-	/**
-	 * Gets the path, without any trailing slash except for "/".
-	 */
-	public Path getPath() {
-		return path;
-	}
+  /**
+   * Gets the path, without any trailing slash except for "/".
+   */
+  public Path getPath() {
+    return path;
+  }
 
-	/**
-	 * Gets the prefix useful for direct path concatenation, which is the path itself except empty string for "/".
-	 */
-	public String getPrefix() {
-		return prefix;
-	}
+  /**
+   * Gets the prefix useful for direct path concatenation, which is the path itself except empty string for "/".
+   */
+  public String getPrefix() {
+    return prefix;
+  }
 
-	@Override
-	public String toString() {
-		return "servlet:" + prefix;
-	}
+  @Override
+  public String toString() {
+    return "servlet:" + prefix;
+  }
 
-	@Override
-	public boolean isAvailable() {
-		return true;
-	}
+  @Override
+  public boolean isAvailable() {
+    return true;
+  }
 
-	@Override
-	public ServletResource getResource(Path path) {
-		// TODO: If path starts with /WEB-INF(/.*) or /META-INF(/.*) (case-insensitive), always not found?
-		// TODO: What if we had a local book, not published, contained in /WEB-INF/?
-		return new ServletResource(this, path);
-	}
+  @Override
+  public ServletResource getResource(Path path) {
+    // TODO: If path starts with /WEB-INF(/.*) or /META-INF(/.*) (case-insensitive), always not found?
+    // TODO: What if we had a local book, not published, contained in /WEB-INF/?
+    return new ServletResource(this, path);
+  }
 }

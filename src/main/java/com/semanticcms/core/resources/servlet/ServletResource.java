@@ -36,65 +36,65 @@ import javax.servlet.ServletContext;
 //       resources remain more natural?  Security implications?  Performance implications?
 public class ServletResource extends Resource {
 
-	final ServletContext servletContext;
-	final ServletContextCache cache;
-	final String servletPath;
+  final ServletContext servletContext;
+  final ServletContextCache cache;
+  final String servletPath;
 
-	public ServletResource(ServletResourceStore store, Path path) {
-		super(store, path);
-		this.servletContext = store.servletContext;
-		this.cache = store.cache;
-		String prefix = store.prefix;
-		String pathStr = path.toString();
-		int prefixLen = prefix.length();
-		if(prefixLen == 0) {
-			this.servletPath = pathStr;
-		} else {
-			int len = prefixLen + pathStr.length();
-			this.servletPath =
-				new StringBuilder(len)
-				.append(prefix)
-				.append(pathStr)
-				.toString()
-			;
-			assert servletPath.length() == len;
-		}
-	}
+  public ServletResource(ServletResourceStore store, Path path) {
+    super(store, path);
+    this.servletContext = store.servletContext;
+    this.cache = store.cache;
+    String prefix = store.prefix;
+    String pathStr = path.toString();
+    int prefixLen = prefix.length();
+    if (prefixLen == 0) {
+      this.servletPath = pathStr;
+    } else {
+      int len = prefixLen + pathStr.length();
+      this.servletPath =
+        new StringBuilder(len)
+        .append(prefix)
+        .append(pathStr)
+        .toString()
+      ;
+      assert servletPath.length() == len;
+    }
+  }
 
-	@Override
-	public ServletResourceStore getStore() {
-		return (ServletResourceStore)store;
-	}
+  @Override
+  public ServletResourceStore getStore() {
+    return (ServletResourceStore)store;
+  }
 
-	@Override
-	public boolean isFilePreferred() {
-		return true;
-	}
+  @Override
+  public boolean isFilePreferred() {
+    return true;
+  }
 
-	/**
-	 * @see  ServletContext#getRealPath(java.lang.String)
-	 */
-	@Override
-	public File getFile() {
-		if(cache == null) {
-			// Not using cache
-			String realPath = servletContext.getRealPath(servletPath);
-			return (realPath == null) ? null : new File(realPath);
-		} else {
-			// Using cache
-			String realPath = cache.getRealPath(servletPath);
-			if(realPath == null) {
-				return null;
-			} else {
-				// Check that still exists, since using cache file might have been recently removed
-				File file = new File(realPath);
-				return file.exists() ? file : null;
-			}
-		}
-	}
+  /**
+   * @see  ServletContext#getRealPath(java.lang.String)
+   */
+  @Override
+  public File getFile() {
+    if (cache == null) {
+      // Not using cache
+      String realPath = servletContext.getRealPath(servletPath);
+      return (realPath == null) ? null : new File(realPath);
+    } else {
+      // Using cache
+      String realPath = cache.getRealPath(servletPath);
+      if (realPath == null) {
+        return null;
+      } else {
+        // Check that still exists, since using cache file might have been recently removed
+        File file = new File(realPath);
+        return file.exists() ? file : null;
+      }
+    }
+  }
 
-	@Override
-	public ServletResourceConnection open() {
-		return new ServletResourceConnection(this);
-	}
+  @Override
+  public ServletResourceConnection open() {
+    return new ServletResourceConnection(this);
+  }
 }

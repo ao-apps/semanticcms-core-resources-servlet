@@ -57,6 +57,7 @@ public class ServletResourceStore implements ResourceStore {
     public void contextInitialized(ServletContextEvent event) {
       getInstances(event.getServletContext());
     }
+
     @Override
     public void contextDestroyed(ServletContextEvent event) {
       // Do nothing
@@ -64,7 +65,7 @@ public class ServletResourceStore implements ResourceStore {
   }
 
   private static final ScopeEE.Application.Attribute<ConcurrentMap<Tuple2<Path, Boolean>, ServletResourceStore>> INSTANCES_APPLICATION_ATTRIBUTE =
-    ScopeEE.APPLICATION.attribute(ServletResourceStore.class.getName() + ".instances");
+      ScopeEE.APPLICATION.attribute(ServletResourceStore.class.getName() + ".instances");
 
   private static ConcurrentMap<Tuple2<Path, Boolean>, ServletResourceStore> getInstances(ServletContext servletContext) {
     return INSTANCES_APPLICATION_ATTRIBUTE.context(servletContext).computeIfAbsent(__ -> new ConcurrentHashMap<>());

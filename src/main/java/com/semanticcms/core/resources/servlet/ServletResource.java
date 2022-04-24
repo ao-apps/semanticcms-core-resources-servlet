@@ -52,10 +52,10 @@ public class ServletResource extends Resource {
     } else {
       int len = prefixLen + pathStr.length();
       this.servletPath =
-        new StringBuilder(len)
-        .append(prefix)
-        .append(pathStr)
-        .toString()
+          new StringBuilder(len)
+              .append(prefix)
+              .append(pathStr)
+              .toString()
       ;
       assert servletPath.length() == len;
     }
@@ -63,7 +63,7 @@ public class ServletResource extends Resource {
 
   @Override
   public ServletResourceStore getStore() {
-    return (ServletResourceStore)store;
+    return (ServletResourceStore) store;
   }
 
   @Override

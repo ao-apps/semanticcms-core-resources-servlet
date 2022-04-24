@@ -71,7 +71,7 @@ public class ServletResourceConnection extends ResourceConnection {
 
   @Override
   public ServletResource getResource() {
-    return (ServletResource)resource;
+    return (ServletResource) resource;
   }
 
   /**
@@ -106,8 +106,8 @@ public class ServletResourceConnection extends ResourceConnection {
   private URL getContextUrl() throws MalformedURLException {
     if (!contextUrlSet) {
       contextUrl = (cache == null)
-        ? servletContext.getResource(servletPath)
-        : cache.getResource(servletPath);
+          ? servletContext.getResource(servletPath)
+          : cache.getResource(servletPath);
       contextUrlSet = true;
     }
     return contextUrl;
@@ -119,9 +119,9 @@ public class ServletResourceConnection extends ResourceConnection {
       throw new IllegalStateException("Connection closed: " + resource);
     }
     return
-      // Note: non-null from getContextFile means exists.
-      getContextFile() != null // Micro optimization?  Thus shortcuts when resource is an existing local file, checking here since other methods use file first, too
-      || getContextUrl() != null
+        // Note: non-null from getContextFile means exists.
+        getContextFile() != null // Micro optimization?  Thus shortcuts when resource is an existing local file, checking here since other methods use file first, too
+            || getContextUrl() != null
     ;
   }
 
@@ -174,15 +174,15 @@ public class ServletResourceConnection extends ResourceConnection {
       // Using cache
       long lastModified = cache.getLastModified(servletPath);
       if (
-        // When lastModified != 0, it is assumed the resource exists
-        lastModified == 0
+          // When lastModified != 0, it is assumed the resource exists
+          lastModified == 0
       ) {
         // Look for possible FileNotFound
         if (
-          // Note: non-null from getContextFile means exists.
-          getContextFile() == null
-          // Handle as URL
-          && getContextUrl() == null
+            // Note: non-null from getContextFile means exists.
+            getContextFile() == null
+                // Handle as URL
+                && getContextUrl() == null
         ) {
           throw new FileNotFoundException(resource.toString());
         }
@@ -248,7 +248,7 @@ public class ServletResourceConnection extends ResourceConnection {
         try {
           if (tempFileContext == null) {
             tempFileContext = new TempFileContext(
-              ScopeEE.Application.TEMPDIR.context(servletContext).get()
+                ScopeEE.Application.TEMPDIR.context(servletContext).get()
             );
           }
           tempFile = tempFileContext.createTempFile(ServletResourceConnection.class.getName(), null);

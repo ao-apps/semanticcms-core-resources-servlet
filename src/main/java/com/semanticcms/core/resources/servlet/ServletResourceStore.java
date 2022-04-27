@@ -86,7 +86,7 @@ public class ServletResourceStore implements ResourceStore {
     // Strip trailing '/' to normalize
     {
       String pathStr = path.toString();
-      if (!pathStr.equals("/") && pathStr.endsWith("/")) {
+      if (!"/".equals(pathStr) && pathStr.endsWith("/")) {
         path = path.prefix(pathStr.length() - 1);
       }
     }
@@ -122,7 +122,7 @@ public class ServletResourceStore implements ResourceStore {
     this.servletContext = servletContext;
     this.path = path;
     String pathStr = path.toString();
-    this.prefix = pathStr.equals("/") ? "" : pathStr;
+    this.prefix = "/".equals(pathStr) ? "" : pathStr;
     this.cache = cached ? ServletContextCache.getInstance(servletContext) : null;
   }
 

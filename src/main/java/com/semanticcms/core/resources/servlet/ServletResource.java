@@ -29,6 +29,9 @@ import com.semanticcms.core.resources.Resource;
 import java.io.File;
 import javax.servlet.ServletContext;
 
+/**
+ * Local servlet resources.
+ */
 // TODO: Expose a way to dispatch to default servlet (or just the resource servletpath)
 //       instead of serving through ResourceServlet?  This would have the side-effect of
 //       potentially exposing other things mapped over this resource servletPath, which may
@@ -40,6 +43,9 @@ public class ServletResource extends Resource {
   final ServletContextCache cache;
   final String servletPath;
 
+  /**
+   * Creates a new local servlet resource.
+   */
   public ServletResource(ServletResourceStore store, Path path) {
     super(store, path);
     this.servletContext = store.servletContext;
@@ -55,8 +61,7 @@ public class ServletResource extends Resource {
           new StringBuilder(len)
               .append(prefix)
               .append(pathStr)
-              .toString()
-      ;
+              .toString();
       assert servletPath.length() == len;
     }
   }
@@ -72,6 +77,8 @@ public class ServletResource extends Resource {
   }
 
   /**
+   * {@inheritDoc}
+   *
    * @see  ServletContext#getRealPath(java.lang.String)
    */
   @Override

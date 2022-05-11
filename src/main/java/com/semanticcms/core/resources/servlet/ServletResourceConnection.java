@@ -39,6 +39,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import javax.servlet.ServletContext;
 
+/**
+ * A connection to a local servlet resource.
+ */
 public class ServletResourceConnection extends ResourceConnection {
 
   private final ServletContext servletContext;
@@ -62,6 +65,10 @@ public class ServletResourceConnection extends ResourceConnection {
 
   private boolean closed;
 
+  /**
+   * Creates a new connection tracker to the given resource.
+   * The actual connection to the underlying resource is only created when first required.
+   */
   public ServletResourceConnection(ServletResource resource) {
     super(resource);
     this.servletContext = resource.servletContext;
@@ -77,8 +84,9 @@ public class ServletResourceConnection extends ResourceConnection {
   /**
    * Gets the underlying file provided by the servlet container, making sure
    * it exists when using the cache.
-   *
+   * <p>
    * Only returns files that exist at the time of first access to this method.
+   * </p>
    */
   File getContextFile() {
     if (!contextFileSet) {
@@ -121,8 +129,7 @@ public class ServletResourceConnection extends ResourceConnection {
     return
         // Note: non-null from getContextFile means exists.
         getContextFile() != null // Micro optimization?  Thus shortcuts when resource is an existing local file, checking here since other methods use file first, too
-            || getContextUrl() != null
-    ;
+            || getContextUrl() != null;
   }
 
   @Override

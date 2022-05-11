@@ -25,8 +25,8 @@ package com.semanticcms.core.resources.servlet;
 
 import com.aoapps.hodgepodge.util.Tuple2;
 import com.aoapps.net.Path;
-import com.aoapps.servlet.attribute.ScopeEE;
 import com.aoapps.servlet.ServletContextCache;
+import com.aoapps.servlet.attribute.ScopeEE;
 import com.semanticcms.core.resources.ResourceStore;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -51,7 +51,10 @@ import javax.servlet.annotation.WebListener;
  */
 public class ServletResourceStore implements ResourceStore {
 
-  @WebListener
+  /**
+   * Initializes the Servlet resource store during {@linkplain ServletContextListener application start-up}.
+   */
+  @WebListener("Initializes the Servlet resource store during application start-up.")
   public static class Initializer implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent event) {
@@ -68,7 +71,7 @@ public class ServletResourceStore implements ResourceStore {
       ScopeEE.APPLICATION.attribute(ServletResourceStore.class.getName() + ".instances");
 
   private static ConcurrentMap<Tuple2<Path, Boolean>, ServletResourceStore> getInstances(ServletContext servletContext) {
-    return INSTANCES_APPLICATION_ATTRIBUTE.context(servletContext).computeIfAbsent(__ -> new ConcurrentHashMap<>());
+    return INSTANCES_APPLICATION_ATTRIBUTE.context(servletContext).computeIfAbsent(name -> new ConcurrentHashMap<>());
   }
 
   /**
@@ -83,13 +86,13 @@ public class ServletResourceStore implements ResourceStore {
    *                before new or moved content becomes visible.
    */
   public static ServletResourceStore getInstance(ServletContext servletContext, Path path, boolean cached) {
-    // Strip trailing '/' to normalize
-    {
-      String pathStr = path.toString();
-      if (!"/".equals(pathStr) && pathStr.endsWith("/")) {
-        path = path.prefix(pathStr.length() - 1);
+      // Strip trailing '/' to normalize
+      {
+        String pathStr = path.toString();
+        if (!"/".equals(pathStr) && pathStr.endsWith("/")) {
+          path = path.prefix(pathStr.length() - 1);
+        }
       }
-    }
 
     ConcurrentMap<Tuple2<Path, Boolean>, ServletResourceStore> instances = getInstances(servletContext);
     Tuple2<Path, Boolean> key = new Tuple2<>(path, cached);

@@ -36,15 +36,15 @@ along with semanticcms-core-resources-servlet.  If not, see <https://www.gnu.org
     <module.name>com.semanticcms.core.resources.servlet.book</module.name>
     <!-- These values are copied from the project being documented -->
     <documented.artifactId>semanticcms-core-resources-servlet</documented.artifactId>
-    <documented.name>SemanticCMS Core Resources Servlet²</documented.name>
+    <documented.name>SemanticCMS Core Resources Servlet</documented.name>
     <documented.description>Redistributable sets of SemanticCMS resources produced by the local servlet container.</documented.description>
 
     <description.html><![CDATA[Documentation for <a target="${javadoc.target}" href="${project.url}">${documented.name}</a> in <a target="${javadoc.target}" href="https://semanticcms.com/">SemanticCMS</a> format.]]></description.html>
   </properties>
 
-  <name>SemanticCMS Core Resources Servlet² Book</name>
+  <name>SemanticCMS Core Resources Servlet Book</name>
   <url>https://semanticcms.com/core/resources/servlet/</url>
-  <description>Documentation for SemanticCMS Core Resources Servlet² in SemanticCMS format.</description>
+  <description>Documentation for SemanticCMS Core Resources Servlet in SemanticCMS format.</description>
   <inceptionYear>2017</inceptionYear>
 
   <licenses>

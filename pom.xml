@@ -47,7 +47,7 @@ along with semanticcms-core-resources-servlet.  If not, see <https://www.gnu.org
     <sonar.coverage.exclusions>**.*</sonar.coverage.exclusions>
   </properties>
 
-  <name>SemanticCMS Core Resources Servlet²</name>
+  <name>SemanticCMS Core Resources Servlet</name>
   <url>https://semanticcms.com/core/resources/servlet/</url>
   <description>Redistributable sets of SemanticCMS resources produced by the local servlet container.</description>
   <inceptionYear>2017</inceptionYear>

@@ -33,7 +33,6 @@ along with semanticcms-core-resources-servlet.  If not, see <https://www.gnu.org
   <packaging>bundle</packaging>
 
   <properties>
-    <project.build.outputTimestamp>2023-02-08T21:06:04Z</project.build.outputTimestamp>
     <module.name>com.semanticcms.core.resources.servlet</module.name>
     <javadoc.breadcrumbs><![CDATA[<a target="${javadoc.target}" href="https://semanticcms.com/">SemanticCMS</a>
 / <a target="${javadoc.target}" href="https://semanticcms.com/core/">Core</a>

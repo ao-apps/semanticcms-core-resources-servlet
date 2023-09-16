@@ -39,5 +39,6 @@ along with semanticcms-core-resources-servlet.  If not, see <https://www.gnu.org
     shortTitle="API Docs"
     datePublished="2017-08-04T18:41:26-05:00"
     dateModified="${ao:getLastModified('index.html')}"
+    allowRobots="false"
   />
 </jsp:root>

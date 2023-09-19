@@ -40,6 +40,7 @@ along with semanticcms-core-resources-servlet.  If not, see <https://www.gnu.org
 / <a target="${javadoc.target}" href="https://semanticcms.com/core/">Core</a>
 / <a target="${javadoc.target}" href="https://semanticcms.com/core/resources/">Resources</a>
 / <a target="${javadoc.target}" href="${project.url}">Servlet</a>]]></javadoc.breadcrumbs>
+    
     <description.html><![CDATA[Redistributable sets of <a target="${javadoc.target}" href="https://semanticcms.com/">SemanticCMS</a> resources produced by the local servlet container.]]></description.html>
     <!-- TODO: Implement tests -->
     <sonar.coverage.exclusions>**.*</sonar.coverage.exclusions>

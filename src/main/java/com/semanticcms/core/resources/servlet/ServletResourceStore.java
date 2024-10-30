@@ -1,6 +1,6 @@
 /*
  * semanticcms-core-resources-servlet - Redistributable sets of SemanticCMS resources produced by the local servlet container.
- * Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022  AO Industries, Inc.
+ * Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2024  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -37,12 +37,11 @@ import javax.servlet.annotation.WebListener;
 
 /**
  * Accesses resources in the local {@link ServletContext}.
- * <p>
- * Optionally, and by default, uses {@link ServletContextCache} to work around some performance issues
+ *
+ * <p>Optionally, and by default, uses {@link ServletContextCache} to work around some performance issues
  * with direct use of {@link ServletContext}, especially when a large number of JAR files are deployed
  * to <code>/WEB-INF/lib</code>, which is one of the shared content distribution models for
- * <a href="https://semanticcms.com/">SemanticCMS</a>.
- * </p>
+ * <a href="https://semanticcms.com/">SemanticCMS</a>.</p>
  *
  * @see  ServletContextCache
  * @see  ServletContext#getResource(java.lang.String)

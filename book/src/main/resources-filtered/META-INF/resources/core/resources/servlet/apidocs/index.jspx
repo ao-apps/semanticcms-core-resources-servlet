@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 semanticcms-core-resources-servlet - Redistributable sets of SemanticCMS resources produced by the local servlet container.
-Copyright (C) 2017, 2019, 2020, 2021, 2022, 2023  AO Industries, Inc.
+Copyright (C) 2017, 2019, 2020, 2021, 2022, 2023, 2025  AO Industries, Inc.
     support@aoindustries.com
     7262 Bull Pen Cir
     Mobile, AL 36695
@@ -35,7 +35,7 @@ along with semanticcms-core-resources-servlet.  If not, see <https://www.gnu.org
     <ao:redirect page="index.html" statusCode="301" addLastModified="false" />
   </c:if>
   <core:page
-    title="@{documented.name} ${ao:getProjectVersion('./', 'com.semanticcms', 'semanticcms-core-resources-servlet', '¿@{project.version}?')} API Docs"
+    title="@{documented.name} ${ao:getProjectVersion('./', '@{project.groupId}', '@{documented.artifactId}', '¿@{project.version}?')} API Docs"
     shortTitle="API Docs"
     datePublished="2017-08-04T18:41:26-05:00"
     dateModified="${ao:getLastModified('index.html')}"

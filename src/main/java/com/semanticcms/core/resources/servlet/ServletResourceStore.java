@@ -1,6 +1,6 @@
 /*
  * semanticcms-core-resources-servlet - Redistributable sets of SemanticCMS resources produced by the local servlet container.
- * Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2024  AO Industries, Inc.
+ * Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2024, 2025  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -85,13 +85,13 @@ public class ServletResourceStore implements ResourceStore {
    *                before new or moved content becomes visible.
    */
   public static ServletResourceStore getInstance(ServletContext servletContext, Path path, boolean cached) {
-      // Strip trailing '/' to normalize
-      {
-        String pathStr = path.toString();
-        if (!"/".equals(pathStr) && pathStr.endsWith("/")) {
-          path = path.prefix(pathStr.length() - 1);
-        }
+    // Strip trailing '/' to normalize
+    {
+      String pathStr = path.toString();
+      if (!"/".equals(pathStr) && pathStr.endsWith("/")) {
+        path = path.prefix(pathStr.length() - 1);
       }
+    }
 
     ConcurrentMap<Tuple2<Path, Boolean>, ServletResourceStore> instances = getInstances(servletContext);
     Tuple2<Path, Boolean> key = new Tuple2<>(path, cached);

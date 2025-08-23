@@ -288,10 +288,10 @@ public class ServletResourceConnection extends ResourceConnection {
       }
     }
     // Closed with its context
-    //if (tempFile != null) {
-    //  tempFile.close();
-    //  tempFile = null;
-    //}
+    // if (tempFile != null) {
+    //   tempFile.close();
+    //   tempFile = null;
+    // }
     if (tempFileContext != null) {
       tempFileContext.close();
     }

@@ -1,6 +1,6 @@
 /*
  * semanticcms-core-resources-servlet - Redistributable sets of SemanticCMS resources produced by the local servlet container.
- * Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2024, 2025  AO Industries, Inc.
+ * Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2024, 2025, 2026  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -28,12 +28,12 @@ import com.aoapps.net.Path;
 import com.aoapps.servlet.ServletContextCache;
 import com.aoapps.servlet.attribute.ScopeEE;
 import com.semanticcms.core.resources.ResourceStore;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.annotation.WebListener;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
 
 /**
  * Accesses resources in the local {@link ServletContext}.
@@ -109,7 +109,7 @@ public class ServletResourceStore implements ResourceStore {
   /**
    * Gets a cached instance.
    *
-   * @see  #getInstance(javax.servlet.ServletContext, com.aoapps.net.Path)
+   * @see  #getInstance(jakarta.servlet.ServletContext, com.aoapps.net.Path)
    */
   public static ServletResourceStore getInstance(ServletContext servletContext, Path path) {
     return getInstance(servletContext, path, true);

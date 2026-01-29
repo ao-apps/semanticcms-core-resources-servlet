@@ -109,7 +109,7 @@ public class ServletResourceStore implements ResourceStore {
   /**
    * Gets a cached instance.
    *
-   * @see  #getInstance(jakarta.servlet.ServletContext, com.aoapps.net.Path)
+   * @see  ServletResourceStore#getInstance(jakarta.servlet.ServletContext, com.aoapps.net.Path)
    */
   public static ServletResourceStore getInstance(ServletContext servletContext, Path path) {
     return getInstance(servletContext, path, true);
